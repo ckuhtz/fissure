@@ -35,9 +35,11 @@ test: ensure-deps
 	$(VENV)/bin/pytest
 
 coverage: ensure-deps
-	$(VENV)/bin/coverage run -m pytest
-	$(VENV)/bin/coverage report
-	$(VENV)/bin/coverage html
+	$(COVERAGE) run -m pytest
+	$(COVERAGE) report
+	$(COVERAGE) xml
+	$(COVERAGE) html
+	$(VENV)/bin/coverage-badge -o coverage.svg -f
 
 # Linting / formatting / typing
 lint: ensure-deps
