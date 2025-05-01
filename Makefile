@@ -8,17 +8,46 @@ PYLINT := $(VENV)/bin/pylint
 MYPY := $(VENV)/bin/mypy
 IMAGE_NAME := fissure-dev
 
-.DEFAULT_GOAL := test
+.DEFAULT_GOAL := default
 
-.PHONY: all venv install ensure-env ensure-deps test lint format check coverage clean \
+.PHONY: default help all venv install ensure-env ensure-deps test lint format check coverage clean \
         docker-build docker-test docker-lint docker-check docker-coverage docker-shell \
         preflight pr
 
 # -------------------------------
-# 🛠️  Virtualenv Setup
+# 🧰 Default and Help Targets
 # -------------------------------
 
-all: test
+default: preflight help
+
+help:
+	@echo ""
+	@echo "🧰  Environment ready. Available targets:"
+	@echo ""
+	@echo " 🔧 Local development:"
+	@echo "    make test             → Run pytest in local venv"
+	@echo "    make lint             → Run pylint on src and tests"
+	@echo "    make check            → Run mypy static type checker"
+	@echo "    make format           → Auto-format code using black"
+	@echo "    make coverage         → Run tests with coverage, generate HTML + badge"
+	@echo "    make clean            → Remove build and test artifacts"
+	@echo ""
+	@echo " 🐳 Dockerized workflow:"
+	@echo "    make docker-build     → Build Docker image with venv + dev tools"
+	@echo "    make docker-test      → Run tests inside Docker using Makefile"
+	@echo "    make docker-lint      → Lint code inside Docker container"
+	@echo "    make docker-check     → Run mypy type checks inside container"
+	@echo "    make docker-coverage  → Run coverage report + badge inside container"
+	@echo "    make docker-shell     → Drop into an interactive shell inside the dev container"
+	@echo ""
+	@echo " 🔁 GitHub Integration:"
+	@echo "    make pr               → Push current branch and open a GitHub pull request"
+	@echo "    make preflight        → Check for docker, make, gh and install gh if needed"
+	@echo ""
+
+# -------------------------------
+# 🛠️  Virtualenv Setup
+# -------------------------------
 
 venv:
 	python3 -m venv $(VENV)
