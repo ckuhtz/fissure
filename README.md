@@ -4,4 +4,4 @@
 # fissure
 # a RIFT implementation
 
-Example Python project with Makefile, VSCode integration, and remote Linux support.
+Just getting started. Nothing to see here yet, but need this to be public for the GH Actions CI pipeline to run properly ;-)..
