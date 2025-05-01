@@ -1,4 +1,4 @@
-name: Docker CI
+name: Docker CI with Coverage Badge and PR Comment
 
 on:
   push:
@@ -10,21 +10,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - name: 🧾 Checkout code
+        uses: actions/checkout@v3
 
-      - name: 🧪 Run docker tests
+      - name: 🐋 Build Docker image (fissure-dev)
+        run: make docker-build
+
+      - name: 🧪 Run tests in Docker
         run: make docker-test
 
-      - name: 🧹 Run docker lint
+      - name: 🧹 Run linter in Docker
         run: make docker-lint
 
-      - name: 🔍 Run docker type check
+      - name: 🔍 Run type checks in Docker
         run: make docker-check
 
-      - name: 📊 Run docker coverage
+      - name: 📊 Run coverage in Docker
         run: make docker-coverage
 
-      - name: 🪄 Generate PR markdown table
+      - name: 📝 Generate markdown coverage report
         run: |
           docker run --rm \
             -v ${{ github.workspace }}:/app \
@@ -32,8 +36,17 @@ jobs:
             -e PATH="/opt/venv/bin:$$PATH" \
             fissure-dev tools/coverage_to_md.py > coverage.md
 
-      - name: 💬 Post coverage to PR comment
+      - name: 💬 Post PR comment with coverage summary
+        if: github.event_name == 'pull_request'
         uses: marocchino/sticky-pull-request-comment@v2
         with:
           header: coverage
           path: coverage.md
+
+      - name: 📤 Upload HTML report + badge
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: |
+            htmlcov/
+            coverage.svg
