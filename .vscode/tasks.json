@@ -1,0 +1,47 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "🧪 Run Tests",
+      "type": "shell",
+      "command": "make test",
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "📊 Coverage Report",
+      "type": "shell",
+      "command": "make coverage",
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "🧹 Lint with Pylint",
+      "type": "shell",
+      "command": "make lint",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "🔍 Type Check with MyPy",
+      "type": "shell",
+      "command": "make check",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "🎨 Format Code with Black",
+      "type": "shell",
+      "command": "make format",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "🧼 Clean",
+      "type": "shell",
+      "command": "make clean",
+      "group": "build",
+      "problemMatcher": []
+    }
+  ]
+}

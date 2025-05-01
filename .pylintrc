@@ -1,0 +1,46 @@
+[MASTER]
+ignore=.venv,build,dist,.git,__pycache__
+jobs=1
+load-plugins=pylint.extensions.mccabe
+
+[MESSAGES CONTROL]
+disable=
+    missing-module-docstring,
+    missing-class-docstring,
+    missing-function-docstring,
+    too-few-public-methods,
+    too-many-arguments,
+    too-many-instance-attributes,
+    too-many-locals,
+    too-many-branches,
+    too-many-statements,
+    too-many-lines,
+    fixme,
+    duplicate-code,
+    invalid-name,
+    no-member,
+    unused-argument,
+    import-error
+
+[FORMAT]
+max-line-length=88
+indent-string='    '
+
+[BASIC]
+good-names=i,j,k,ex,Run,_,id
+
+[TYPECHECK]
+ignored-modules=pytest
+
+[DESIGN]
+max-args=8
+max-attributes=10
+max-returns=6
+max-branches=12
+max-statements=50
+max-locals=15
+
+[REPORTS]
+output-format=colorized
+reports=no
+score=no
