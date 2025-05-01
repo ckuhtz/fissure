@@ -1,7 +1,11 @@
-VENV := .venv
-PYTHON := $(VENV)/bin/python
-PIP := $(VENV)/bin/pip
-REQFILE := requirements-dev.txt
+VENV = .venv
+PYTHON = $(VENV)/bin/python
+PIP = $(VENV)/bin/pip
+PYTEST = $(VENV)/bin/pytest
+COVERAGE = $(VENV)/bin/coverage
+BLACK = $(VENV)/bin/black
+PYLINT = $(VENV)/bin/pylint
+MYPY = $(VENV)/bin/mypy
 
 # Extract dev dependencies from pyproject.toml (static list)
 # Optionally, generate this from pip if you prefer
