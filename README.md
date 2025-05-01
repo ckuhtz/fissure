@@ -1,5 +1,5 @@
 
-[![Coverage](https://ckuhtz.github.io/fissure/coverage.svg)](https://ckuhtz.github.io/fissure/htmlcov/index.html)
+Pytest: [![Pytest Coverage](https://ckuhtz.github.io/fissure/coverage.svg)]
 
 ## fissure 
 ### a RIFT implementation
