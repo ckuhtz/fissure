@@ -6,14 +6,19 @@ root = tree.getroot()
 
 lines = ["| File | Stmts | Miss | Cover |", "|------|-------|------|--------|"]
 
-for cls in root.findall(".//class"):
-    fname = cls.attrib["filename"]
-    lines_total = int(cls.attrib["lines-valid"])
-    lines_missed = int(cls.attrib["lines-missed"])
-    coverage = float(cls.attrib["line-rate"]) * 100
-    lines.append(f"| `{fname}` | {lines_total} | {lines_missed} | {coverage:.1f}% |")
+for file in root.findall(".//packages/package/classes/class"):
+    filename = file.attrib.get("filename", "???")
+    lines_elem = file.find("lines")
+    total = 0
+    missed = 0
+    for line in lines_elem.findall("line"):
+        total += 1
+        if int(line.attrib["hits"]) == 0:
+            missed += 1
+    covered = ((total - missed) / total * 100) if total else 0
+    lines.append(f"| `{filename}` | {total} | {missed} | {covered:.1f}% |")
 
-overall = float(root.attrib["line-rate"]) * 100
-print(f"![Coverage](https://ckuhtz.github.io/fissure/coverage.svg)\n")
+overall = float(root.attrib.get("line-rate", "0")) * 100
+print("![Coverage](https://ckuhtz.github.io/fissure/coverage.svg)\n")
 print(f"### 🧪 Test Coverage Report\n> Total: **{overall:.1f}%**\n")
 print("\n".join(lines))
