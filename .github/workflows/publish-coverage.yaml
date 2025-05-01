@@ -1,16 +1,44 @@
-      - name: Generate coverage + badge
+name: Publish Coverage Badge and Report
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: 🧾 Checkout
+        uses: actions/checkout@v3
+
+      - name: 🐍 Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: 📦 Install Dependencies
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+          pip install -U pip
+          pip install -e .[dev]
+          pip install coverage-badge
+
+      - name: 🧪 Run Tests and Generate Coverage
         run: |
           source venv/bin/activate
           coverage run -m pytest
           coverage html
           coverage xml
           coverage-badge -o coverage.svg -f
-          cp coverage.svg htmlcov/     # 👈 ensure it's in the published dir
 
-      - name: Push to gh-pages
+      - name: 📤 Publish to gh-pages (root)
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: htmlcov         # 👈 deploys htmlcov/ + coverage.svg
+          publish_dir: .
           publish_branch: gh-pages
           keep_files: true
