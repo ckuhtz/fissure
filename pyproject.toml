@@ -3,10 +3,10 @@ requires = ["setuptools>=61", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "your_project"
+name = "fissure"
 version = "0.1.0"
-description = "A sample Python project"
-authors = [{ name = "Your Name", email = "you@example.com" }]
+description = "RIFT implementation"
+authors = [{ name = "Christian Kuhtz", email = "christian@kuhtz.com" }]
 readme = "README.md"
 requires-python = ">=3.8"
 dependencies = []
