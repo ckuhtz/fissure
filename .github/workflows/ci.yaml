@@ -1,0 +1,39 @@
+name: Docker CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: 🧪 Run docker tests
+        run: make docker-test
+
+      - name: 🧹 Run docker lint
+        run: make docker-lint
+
+      - name: 🔍 Run docker type check
+        run: make docker-check
+
+      - name: 📊 Run docker coverage
+        run: make docker-coverage
+
+      - name: 🪄 Generate PR markdown table
+        run: |
+          docker run --rm \
+            -v ${{ github.workspace }}:/app \
+            -w /app \
+            -e PATH="/opt/venv/bin:$$PATH" \
+            fissure-dev tools/coverage_to_md.py > coverage.md
+
+      - name: 💬 Post coverage to PR comment
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: coverage
+          path: coverage.md

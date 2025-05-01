@@ -17,7 +17,8 @@ dev = [
     "coverage",
     "pylint",
     "mypy",
-    "black"
+    "black",
+    "coverage-badge"
 ]
 
 [tool.pytest.ini_options]
