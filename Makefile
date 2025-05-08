@@ -24,6 +24,10 @@ help:
 	@echo ""
 	@echo "🧰  Environment ready. Available targets:"
 	@echo ""
+	@echo " 🧰 Tooling"
+	@echo "    make preflight        → Rerun check for docker, make, gh"
+	@echo "    make venv             → Rerun venv dep check"
+	@echo ""
 	@echo " 🔧 Local development:"
 	@echo "    make test             → Run pytest in local venv"
 	@echo "    make lint             → Run pylint on src and tests"
@@ -38,11 +42,10 @@ help:
 	@echo "    make docker-lint      → Lint code inside Docker container"
 	@echo "    make docker-check     → Run mypy type checks inside container"
 	@echo "    make docker-coverage  → Run coverage report + badge inside container"
-	@echo "    make docker-shell     → Drop into an interactive shell inside the dev container"
+	@echo "    make docker-shell     → Interactive shell inside the dev container"
 	@echo ""
 	@echo " 🔁 GitHub Integration:"
 	@echo "    make pr               → Push current branch and open a GitHub pull request"
-	@echo "    make preflight        → Check for docker, make, gh and install gh if needed"
 	@echo ""
 
 # -------------------------------
