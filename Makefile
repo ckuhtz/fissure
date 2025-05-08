@@ -147,6 +147,7 @@ preflight:
 			exit 1; \
 		fi; \
 	}
+	@echo "✅ preflight complete."
 
 # -------------------------------
 # 🔀 GitHub PR Automation
