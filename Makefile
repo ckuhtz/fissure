@@ -7,10 +7,13 @@ BLACK := $(VENV)/bin/black
 PYLINT := $(VENV)/bin/pylint
 MYPY := $(VENV)/bin/mypy
 IMAGE_NAME := fissure-dev
+THRIFT := $(shell command -v thrift)
+THRIFT_IDL_DIR = spec/
+THRIFT_GEN_DIR = src/gen-py
 
 .DEFAULT_GOAL := default
 
-.PHONY: default help all venv install ensure-env ensure-deps test lint format check coverage \
+.PHONY: default help all venv install ensure-env ensure-thrift ensure-deps test lint format check coverage \
 		clean dist-clean docker-build docker-test docker-lint docker-check docker-coverage \
 		docker-shell docker-clean preflight pr
 
@@ -18,7 +21,7 @@ IMAGE_NAME := fissure-dev
 # 🧰 Default and Help Targets
 # -------------------------------
 
-default: preflight help
+default: preflight venv help
 
 help:
 	@echo ""
@@ -53,11 +56,8 @@ help:
 # 🛠️  Virtualenv Setup
 # -------------------------------
 
-venv:
-	@echo "🧰 checking venv"
-	python3 -m venv $(VENV)
-	$(PIP) install -U pip
-	@echo "✅ venv ready"
+venv: ensure-env ensure-deps ensure-thrift
+	@echo "✅ venv complete"
 
 ensure-env:
 	@test -d $(VENV) || { \
@@ -66,7 +66,24 @@ ensure-env:
 		$(PIP) install -U pip; \
 	}
 
-ensure-deps: ensure-env
+ensure-thrift: $(THRIFT_GEN_DIR)/common $(THRIFT_GEN_DIR)/encoding
+	@echo "✅ IDL python complete"
+
+ensure-thrift-gen-py:
+	@test -d $(THRIFT_GEN_DIR) || { \
+		echo "🧰 creating gen-py for python IDL files"; \
+		mkdir $(THRIFT_GEN_DIR); \
+	}
+
+$(THRIFT_GEN_DIR)/common: ensure-thrift-gen-py
+	@echo "🧰 generating python code from common.thrift IDL"
+	@$(THRIFT) --gen py --out $(THRIFT_GEN_DIR) $(THRIFT_IDL_DIR)/common.thrift
+
+$(THRIFT_GEN_DIR)/encoding: ensure-thrift-gen-py
+	@echo "🧰 generating python code from encoding.thrift IDL"
+	@$(THRIFT) --gen py -I ${THRIFT_IDL_DIR} --out $(THRIFT_GEN_DIR) $(THRIFT_IDL_DIR)/encoding.thrift
+	
+ensure-deps:
 	@$(PYTHON) -c "import pytest, pylint, black, mypy, thrift" 2>/dev/null || { \
 		echo '📦 Installing dev dependencies...'; \
 		$(PIP) install -e .[dev]; \
@@ -77,19 +94,19 @@ ensure-deps: ensure-env
 # 🧪 Core Tasks
 # -------------------------------
 
-test: ensure-deps
+test: venv
 	$(PYTEST)
 
-lint: ensure-deps
+lint: venv
 	$(PYLINT) src tests
 
-format: ensure-deps
+format: venv
 	$(BLACK) src tests
 
 check: lint
 	$(MYPY) src tests
 
-coverage: ensure-deps
+coverage: venv
 	$(COVERAGE) run -m pytest
 	$(COVERAGE) report
 	$(COVERAGE) xml
@@ -108,7 +125,8 @@ clean:
 				-name build -o \
 				-name dist -o \
 				-name .venv -o \
-				-name '*.egg-info' \
+				-name '*.egg-info' -o \
+				-name gen-py \
 			\) \
 		-prune -exec sh -c 'echo "\t💥 $$1"; rm -rf -- "$$1"' _ {} \;
 	@echo "🧹 2️⃣ files"
