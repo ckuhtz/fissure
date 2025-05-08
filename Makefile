@@ -182,6 +182,20 @@ preflight:
 			echo "   Cannot install 'gh' automatically on this platform."; \
 			exit 1; \
 		fi; \
+
+	@command -v thrift >/dev/null 2>&1 || { \
+		echo "🔍 'thrift' (Apache Thrift Compiler) not found. Attempting to install..."; \
+		if command -v brew >/dev/null 2>&1; then \
+			brew install thrift; \
+		elif command -v apt >/dev/null 2>&1; then \
+			sudo apt update && sudo apt install -y thrift-compiler; \
+		elif command -v dnf >/dev/null 2>&1; then \
+			sudo dnf install -y thrift-compiler; \
+		else \
+			echo "❌ Preflight failed."; \
+			echo "   Cannot install 'thrift' automatically on this platform."; \
+			exit 1; \
+		fi; \
 	}
 	@echo "✅ preflight complete."
 
