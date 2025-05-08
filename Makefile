@@ -67,7 +67,7 @@ ensure-env:
 	}
 
 ensure-deps: ensure-env
-	@$(PYTHON) -c "import pytest, pylint, black, mypy" 2>/dev/null || { \
+	@$(PYTHON) -c "import pytest, pylint, black, mypy, thrift" 2>/dev/null || { \
 		echo '📦 Installing dev dependencies...'; \
 		$(PIP) install -e .[dev]; \
 	}
