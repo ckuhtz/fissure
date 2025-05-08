@@ -10,9 +10,9 @@ IMAGE_NAME := fissure-dev
 
 .DEFAULT_GOAL := default
 
-.PHONY: default help all venv install ensure-env ensure-deps test lint format check coverage clean \
-        docker-build docker-test docker-lint docker-check docker-coverage docker-shell docker-clean \
-        preflight pr
+.PHONY: default help all venv install ensure-env ensure-deps test lint format check coverage \
+		clean dist-clean docker-build docker-test docker-lint docker-check docker-coverage \
+		docker-shell docker-clean preflight pr
 
 # -------------------------------
 # 🧰 Default and Help Targets
@@ -122,6 +122,8 @@ clean:
 		-exec sh -c 'echo "\t💥 $$1"; rm -f -- "$$1"' _ {} \;
 	@echo "✅ tree clean"
 
+dist-clean: clean docker-clean
+
 # -------------------------------
 # 🐳 Dockerized Versions
 # -------------------------------
@@ -145,7 +147,9 @@ docker-coverage: docker-build
 	docker run --rm -v $(CURDIR):/app -w /app -e PATH="/opt/venv/bin:$$PATH" $(IMAGE_NAME) make coverage
 
 docker-clean:
-	docker image rm ${IMAGE_NAME} --force
+	@echo "🧹 cleaning docker artifacts"
+	@docker image rm ${IMAGE_NAME} --force
+	@echo "✅ docker clean"
 
 # -------------------------------
 # 🚦 Preflight Checks
