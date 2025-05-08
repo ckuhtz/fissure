@@ -182,7 +182,8 @@ preflight:
 			echo "   Cannot install 'gh' automatically on this platform."; \
 			exit 1; \
 		fi; \
-
+	}
+	
 	@command -v thrift >/dev/null 2>&1 || { \
 		echo "🔍 'thrift' (Apache Thrift Compiler) not found. Attempting to install..."; \
 		if command -v brew >/dev/null 2>&1; then \
@@ -197,6 +198,7 @@ preflight:
 			exit 1; \
 		fi; \
 	}
+
 	@echo "✅ preflight complete."
 
 # -------------------------------
