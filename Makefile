@@ -28,7 +28,7 @@ help:
 	@echo "    make preflight        → Rerun check for docker, make, gh"
 	@echo "    make venv             → Rerun venv dep check"
 	@echo ""
-	@echo " 🔧 Local development:"
+	@echo " 👩‍💻 Local development:"
 	@echo "    make test             → Run pytest in local venv"
 	@echo "    make lint             → Run pylint on src and tests"
 	@echo "    make check            → Run mypy static type checker"
@@ -43,6 +43,7 @@ help:
 	@echo "    make docker-check     → Run mypy type checks inside container"
 	@echo "    make docker-coverage  → Run coverage report + badge inside container"
 	@echo "    make docker-shell     → Interactive shell inside the dev container"
+	@echo "    make docker-clean     → Remove docker artifacts"
 	@echo ""
 	@echo " 🔁 GitHub Integration:"
 	@echo "    make pr               → Push current branch and open a GitHub pull request"
@@ -53,8 +54,10 @@ help:
 # -------------------------------
 
 venv:
+	@echo "🧰 checking venv"
 	python3 -m venv $(VENV)
 	$(PIP) install -U pip
+	@echo "✅ venv ready"
 
 ensure-env:
 	@test -d $(VENV) || { \
@@ -68,8 +71,7 @@ ensure-deps: ensure-env
 		echo '📦 Installing dev dependencies...'; \
 		$(PIP) install -e .[dev]; \
 	}
-
-install: ensure-deps
+	@echo "✅ dependencies complete"
 
 # -------------------------------
 # 🧪 Core Tasks
@@ -119,6 +121,9 @@ docker-check: docker-build
 docker-coverage: docker-build
 	docker run --rm -v $(CURDIR):/app -w /app -e PATH="/opt/venv/bin:$$PATH" $(IMAGE_NAME) make coverage
 
+docker-clean:
+	docker image rm ${IMAGE_NAME} --force
+
 # -------------------------------
 # 🚦 Preflight Checks
 # -------------------------------
@@ -147,6 +152,7 @@ preflight:
 			exit 1; \
 		fi; \
 	}
+	@echo "✅ preflight complete."
 
 # -------------------------------
 # 🔀 GitHub PR Automation
