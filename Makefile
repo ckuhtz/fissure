@@ -34,7 +34,7 @@ help:
 	@echo "    make check            → Run mypy static type checker"
 	@echo "    make format           → Auto-format code using black"
 	@echo "    make coverage         → Run tests with coverage, generate HTML + badge"
-	@echo "    make clean            → Remove build and test artifacts"
+	@echo "    make clean|dist-clean → Different levels of cleanliness"
 	@echo ""
 	@echo " 🐳 Dockerized workflow:"
 	@echo "    make docker-build     → Build Docker image with venv + dev tools"
@@ -123,6 +123,7 @@ clean:
 	@echo "✅ tree clean"
 
 dist-clean: clean docker-clean
+	@echo "🧼 sparkly clean"
 
 # -------------------------------
 # 🐳 Dockerized Versions
@@ -148,7 +149,7 @@ docker-coverage: docker-build
 
 docker-clean:
 	@echo "🧹 cleaning docker artifacts"
-	@docker image rm ${IMAGE_NAME} --force
+	@docker image rm ${IMAGE_NAME} --force 2>/dev/null
 	@echo "✅ docker clean"
 
 # -------------------------------
