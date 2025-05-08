@@ -121,6 +121,9 @@ docker-check: docker-build
 docker-coverage: docker-build
 	docker run --rm -v $(CURDIR):/app -w /app -e PATH="/opt/venv/bin:$$PATH" $(IMAGE_NAME) make coverage
 
+docker-clean:
+	docker image rm ${IMAGE_NAME} --force
+
 # -------------------------------
 # 🚦 Preflight Checks
 # -------------------------------
