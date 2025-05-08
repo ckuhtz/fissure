@@ -176,7 +176,7 @@ struct TIDEPacket {
  /** First TIE header in the TIDE packet. */
  1: required TIEID start_range;
  /** Last TIE header in the TIDE packet. */
-ed TIEID end_range;
+ 2: required TIEID end_range;
  /** _Sorted_ list of headers. */
  3: required list<TIEHeaderWithLifeTime>
  headers;
