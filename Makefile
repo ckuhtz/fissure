@@ -11,7 +11,7 @@ IMAGE_NAME := fissure-dev
 .DEFAULT_GOAL := default
 
 .PHONY: default help all venv install ensure-env ensure-deps test lint format check coverage clean \
-        docker-build docker-test docker-lint docker-check docker-coverage docker-shell \
+        docker-build docker-test docker-lint docker-check docker-coverage docker-shell docker-clean \
         preflight pr
 
 # -------------------------------
