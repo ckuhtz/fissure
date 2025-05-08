@@ -43,6 +43,7 @@ help:
 	@echo "    make docker-check     → Run mypy type checks inside container"
 	@echo "    make docker-coverage  → Run coverage report + badge inside container"
 	@echo "    make docker-shell     → Interactive shell inside the dev container"
+	@echo "    make docker-clean     → Remove docker artifacts"
 	@echo ""
 	@echo " 🔁 GitHub Integration:"
 	@echo "    make pr               → Push current branch and open a GitHub pull request"
