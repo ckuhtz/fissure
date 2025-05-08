@@ -28,7 +28,7 @@ help:
 	@echo "    make preflight        → Rerun check for docker, make, gh"
 	@echo "    make venv             → Rerun venv dep check"
 	@echo ""
-	@echo " 🔧 Local development:"
+	@echo " 👩‍💻 Local development:"
 	@echo "    make test             → Run pytest in local venv"
 	@echo "    make lint             → Run pylint on src and tests"
 	@echo "    make check            → Run mypy static type checker"
