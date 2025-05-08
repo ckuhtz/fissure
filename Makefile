@@ -97,7 +97,30 @@ coverage: ensure-deps
 	$(VENV)/bin/coverage-badge -o coverage.svg -f
 
 clean:
-	rm -rf .pytest_cache .mypy_cache .coverage htmlcov build dist *.egg-info coverage.svg results.xml
+	@echo "🧹 cleaning build artifacts"
+	@echo "🧹 1️⃣ directories"
+	@find . \
+		-type d \
+			\(	\
+				-name .pytest_cache -o \
+				-name .mypy_cache -o \
+				-name htmlcov -o \
+				-name build -o \
+				-name dist -o \
+				-name .venv -o \
+				-name '*.egg-info' \
+			\) \
+		-prune -exec sh -c 'echo "💥 Deleting: $$1"; rm -rf -- "$$1"' _ {} \;
+	@echo "🧹 2️⃣ files"
+	@find . \
+		-type f \
+			\( \
+				-name .coverage -o \
+				-name coverage.svg -o \
+				-name results.xml \
+			\) \
+		-exec sh -c 'echo "💥 Deleting: $$1"; rm -f -- "$$1"' _ {} \;
+	@echo "✅ tree clean"
 
 # -------------------------------
 # 🐳 Dockerized Versions
