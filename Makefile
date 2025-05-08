@@ -53,8 +53,10 @@ help:
 # -------------------------------
 
 venv:
+	@echo "🧰 checking venv"
 	python3 -m venv $(VENV)
 	$(PIP) install -U pip
+	@echo "✅ venv ready"
 
 ensure-env:
 	@test -d $(VENV) || { \
@@ -68,8 +70,7 @@ ensure-deps: ensure-env
 		echo '📦 Installing dev dependencies...'; \
 		$(PIP) install -e .[dev]; \
 	}
-
-install: ensure-deps
+	@echo "✅ dependencies complete"
 
 # -------------------------------
 # 🧪 Core Tasks
