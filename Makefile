@@ -25,7 +25,7 @@ help:
 	@echo "🧰  Environment ready. Available targets:"
 	@echo ""
 	@echo " 🧰 Tooling"
-	@echo "    make preflight        → Rerun check for docker, make, gh"
+	@echo "    make preflight        → Rerun check for docker, make, gh, thrift"
 	@echo "    make venv             → Rerun venv dep check"
 	@echo ""
 	@echo " 👩‍💻 Local development:"
@@ -183,7 +183,7 @@ preflight:
 			exit 1; \
 		fi; \
 	}
-	
+
 	@command -v thrift >/dev/null 2>&1 || { \
 		echo "🔍 'thrift' (Apache Thrift Compiler) not found. Attempting to install..."; \
 		if command -v brew >/dev/null 2>&1; then \
