@@ -110,7 +110,7 @@ clean:
 				-name .venv -o \
 				-name '*.egg-info' \
 			\) \
-		-prune -exec sh -c 'echo "💥 Deleting: $$1"; rm -rf -- "$$1"' _ {} \;
+		-prune -exec sh -c 'echo "\t💥 $$1"; rm -rf -- "$$1"' _ {} \;
 	@echo "🧹 2️⃣ files"
 	@find . \
 		-type f \
@@ -119,7 +119,7 @@ clean:
 				-name coverage.svg -o \
 				-name results.xml \
 			\) \
-		-exec sh -c 'echo "💥 Deleting: $$1"; rm -f -- "$$1"' _ {} \;
+		-exec sh -c 'echo "\t💥 $$1"; rm -f -- "$$1"' _ {} \;
 	@echo "✅ tree clean"
 
 # -------------------------------
@@ -155,11 +155,13 @@ preflight:
 	@echo "🚦 Running preflight checks..."
 
 	@command -v make >/dev/null 2>&1 || { \
-		echo "❌ 'make' is required but not installed."; exit 1; \
+		echo "❌ Preflight failed."; \
+		echo "   'make' is required but not installed."; exit 1; \
 	}
 
 	@command -v docker >/dev/null 2>&1 || { \
-		echo "❌ 'docker' is required but not installed."; exit 1; \
+		echo "❌ Preflight failed."; \
+		echo "   'docker' is required but not installed."; exit 1; \
 	}
 
 	@command -v gh >/dev/null 2>&1 || { \
@@ -171,7 +173,8 @@ preflight:
 		elif command -v dnf >/dev/null 2>&1; then \
 			sudo dnf install -y gh; \
 		else \
-			echo "❌ Cannot install 'gh' automatically on this platform."; \
+			echo "❌ Preflight failed."; \
+			echo "   Cannot install 'gh' automatically on this platform."; \
 			exit 1; \
 		fi; \
 	}
