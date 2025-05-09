@@ -160,16 +160,32 @@ docker-shell: docker-build
 	docker run --rm -it -v $(CURDIR):/app -w /app -e PATH="/opt/venv/bin:$$PATH" $(IMAGE_NAME) bash
 
 docker-test: docker-build
-	docker run --rm -v $(CURDIR):/app -w /app -e PATH="/opt/venv/bin:$$PATH" $(IMAGE_NAME) make test
+	docker run --rm \
+	  -v $(CURDIR):/app -w /app \
+	  -e PATH="/opt/venv/bin:$$PATH" \
+	  $(IMAGE_NAME) \
+	  make VENV=/opt/venv test 
 
 docker-lint: docker-build
-	docker run --rm -v $(CURDIR):/app -w /app -e PATH="/opt/venv/bin:$$PATH" $(IMAGE_NAME) make lint
+	docker run --rm \
+	  -v $(CURDIR):/app -w /app \
+	  -e PATH="/opt/venv/bin:$$PATH" \
+	  $(IMAGE_NAME) \
+	  make VENV=/opt/venv lint
 
 docker-check: docker-build
-	docker run --rm -v $(CURDIR):/app -w /app -e PATH="/opt/venv/bin:$$PATH" $(IMAGE_NAME) make check
+	docker run --rm \
+	  -v $(CURDIR):/app -w /app \
+	  -e PATH="/opt/venv/bin:$$PATH" \
+	  $(IMAGE_NAME) \
+	  make VENV=/opt/venv check
 
 docker-coverage: docker-build
-	docker run --rm -v $(CURDIR):/app -w /app -e PATH="/opt/venv/bin:$$PATH" $(IMAGE_NAME) make coverage
+	docker run --rm \
+	  -v $(CURDIR):/app -w /app \
+	  -e PATH="/opt/venv/bin:$$PATH" \
+	  $(IMAGE_NAME) \
+	  make VENV=/opt/venv coverage
 
 docker-clean:
 	@echo "🧹 cleaning docker artifacts"
