@@ -76,16 +76,16 @@ ensure-thrift: $(THRIFT_GEN_DIR)/common $(THRIFT_GEN_DIR)/encoding
 
 ensure-thrift-gen-py:
 	@test -d $(THRIFT_GEN_DIR) || { \
-		echo "🧰 creating gen-py for python IDL files"; \
+		echo "📦 creating gen-py directory for thrift IDL python code"; \
 		mkdir $(THRIFT_GEN_DIR); \
 	}
 
 $(THRIFT_GEN_DIR)/common: ensure-thrift-gen-py
-	@echo "🧰 generating python code from common.thrift IDL"
+	@echo "📦 compiling common.thrift IDL"
 	@$(THRIFT_COMPILER) --gen py --out $(THRIFT_GEN_DIR) $(THRIFT_IDL_DIR)/common.thrift
 
 $(THRIFT_GEN_DIR)/encoding: ensure-thrift-gen-py
-	@echo "🧰 generating python code from encoding.thrift IDL"
+	@echo "📦 compiling encoding.thrift IDL"
 	@$(THRIFT_COMPILER) --gen py -I ${THRIFT_IDL_DIR} --out $(THRIFT_GEN_DIR) $(THRIFT_IDL_DIR)/encoding.thrift
 	
 ensure-deps:
@@ -93,7 +93,7 @@ ensure-deps:
 		echo '📦 Installing dev dependencies...'; \
 		$(PIP) install -e .[dev]; \
 	}
-	@echo "✅ dependencies complete"
+	@echo "✅ python dependencies complete"
 
 # -------------------------------
 # 🧪 Core Tasks
