@@ -71,7 +71,8 @@ ensure-env:
 	@$(PYTHON) -m pip install --upgrade pip
 	@echo "✅ venv ready"
 
-ensure-thrift: $(THRIFT_GEN_DIR)/common $(THRIFT_GEN_DIR)/encoding
+# ensure-thrift: $(THRIFT_GEN_DIR)/common $(THRIFT_GEN_DIR)/encoding
+ensure-thrift: $(THRIFT_GEN_DIR)/encoding
 	@echo "✅ IDL python complete"
 
 ensure-thrift-gen-py:
