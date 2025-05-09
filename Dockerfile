@@ -5,7 +5,7 @@ WORKDIR /app
 RUN apt-get update && \
     apt-get install --yes --no-install-recommends
 RUN apt-get install --yes --no-install-recommends build-essential make thrift-compiler
-RUN apt-get rm -rf /var/lib/apt/lists/*
+RUN rm -rf /var/lib/apt/lists/*
 
 RUN python -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
