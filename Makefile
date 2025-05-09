@@ -7,7 +7,7 @@ BLACK := $(VENV)/bin/black
 PYLINT := $(VENV)/bin/pylint
 MYPY := $(VENV)/bin/mypy
 IMAGE_NAME := fissure-dev
-THRIFT := $(shell command -v thrift)
+THRIFT_COMPILER := $(shell command -v thrift)
 THRIFT_IDL_DIR = spec/
 THRIFT_GEN_DIR = src/gen-py
 
@@ -77,11 +77,11 @@ ensure-thrift-gen-py:
 
 $(THRIFT_GEN_DIR)/common: ensure-thrift-gen-py
 	@echo "🧰 generating python code from common.thrift IDL"
-	@$(THRIFT) --gen py --out $(THRIFT_GEN_DIR) $(THRIFT_IDL_DIR)/common.thrift
+	@$(THRIFT_COMPILER) --gen py --out $(THRIFT_GEN_DIR) $(THRIFT_IDL_DIR)/common.thrift
 
 $(THRIFT_GEN_DIR)/encoding: ensure-thrift-gen-py
 	@echo "🧰 generating python code from encoding.thrift IDL"
-	@$(THRIFT) --gen py -I ${THRIFT_IDL_DIR} --out $(THRIFT_GEN_DIR) $(THRIFT_IDL_DIR)/encoding.thrift
+	@$(THRIFT_COMPILER) --gen py -I ${THRIFT_IDL_DIR} --out $(THRIFT_GEN_DIR) $(THRIFT_IDL_DIR)/encoding.thrift
 	
 ensure-deps:
 	@$(PYTHON) -c "import pytest, pylint, black, mypy, thrift" 2>/dev/null || { \
