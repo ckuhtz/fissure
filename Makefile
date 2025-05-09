@@ -60,11 +60,16 @@ venv: ensure-env ensure-deps ensure-thrift
 	@echo "✅ venv complete"
 
 ensure-env:
-	@test -d $(VENV) || { \
-		echo "🐍 Creating virtual environment..."; \
-		python3 -m venv $(VENV); \
-		$(PIP) install -U pip; \
+	@test -d "$(VENV)" || { \
+		echo "🐍 Creating virtual environment…"; \
+		python3 -m venv "$(VENV)"; \
 	}
+	@test -x "$(PIP)" || { \
+		echo "📦 'pip' not found in venv – installing with ensurepip…"; \
+		$(PYTHON) -m ensurepip --upgrade; \
+	}
+	@$(PYTHON) -m pip install --upgrade pip
+	@echo "✅ venv ready"
 
 ensure-thrift: $(THRIFT_GEN_DIR)/common $(THRIFT_GEN_DIR)/encoding
 	@echo "✅ IDL python complete"
