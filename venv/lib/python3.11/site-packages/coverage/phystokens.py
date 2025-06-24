@@ -70,7 +70,7 @@ def _phys_tokens(toks: TokenInfos) -> TokenInfos:
                         # It's a multi-line string and the first line ends with
                         # a backslash, so we don't need to inject another.
                         inject_backslash = False
-                elif sys.version_info >= (3, 12) and ttype == token.FSTRING_MIDDLE:
+                elif env.PYBEHAVIOR.fstring_syntax and ttype == token.FSTRING_MIDDLE:
                     inject_backslash = False
                 if inject_backslash:
                     # Figure out what column the backslash is in.
@@ -144,6 +144,9 @@ def source_token_lines(source: str) -> TSourceTokenLines:
             elif ttype in ws_tokens:
                 mark_end = False
             else:
+                if env.PYBEHAVIOR.fstring_syntax and ttype == token.FSTRING_MIDDLE:
+                    part = part.replace("{", "{{").replace("}", "}}")
+                    ecol = scol + len(part)
                 if mark_start and scol > col:
                     line.append(("ws", " " * (scol - col)))
                     mark_start = False
@@ -152,19 +155,16 @@ def source_token_lines(source: str) -> TSourceTokenLines:
                     if keyword.iskeyword(ttext):
                         # Hard keywords are always keywords.
                         tok_class = "key"
-                    elif sys.version_info >= (3, 10):   # PYVERSIONS
-                        # Need the version_info check to keep mypy from borking
-                        # on issoftkeyword here.
-                        if env.PYBEHAVIOR.soft_keywords and keyword.issoftkeyword(ttext):
-                            # Soft keywords appear at the start of their line.
-                            if len(line) == 0:
-                                is_start_of_line = True
-                            elif (len(line) == 1) and line[0][0] == "ws":
-                                is_start_of_line = True
-                            else:
-                                is_start_of_line = False
-                            if is_start_of_line and sline in soft_key_lines:
-                                tok_class = "key"
+                    elif env.PYBEHAVIOR.soft_keywords and keyword.issoftkeyword(ttext):
+                        # Soft keywords appear at the start of their line.
+                        if len(line) == 0:
+                            is_start_of_line = True
+                        elif (len(line) == 1) and line[0][0] == "ws":
+                            is_start_of_line = True
+                        else:
+                            is_start_of_line = False
+                        if is_start_of_line and sline in soft_key_lines:
+                            tok_class = "key"
                 line.append((tok_class, part))
                 mark_end = True
             scol = 0

@@ -60,14 +60,12 @@ venv: ensure-env ensure-deps ensure-thrift
 	@echo "✅ venv complete"
 
 ensure-env:
-	@test -d "$(VENV)" || { \
-		echo "🐍 Creating virtual environment…"; \
+	@if [ ! -x "$(PYTHON)" ] || ! $(PYTHON) -m pip --version >/dev/null 2>&1; then \
+		echo "🐍 Creating fresh virtualenv with pip..."; \
+		rm -rf "$(VENV)"; \
 		python3 -m venv "$(VENV)"; \
-	}
-	@test -x "$(PIP)" || { \
-		echo "📦 'pip' not found in venv – installing with ensurepip…"; \
-		$(PYTHON) -m ensurepip --upgrade; \
-	}
+		$(VENV)/bin/python -m ensurepip --upgrade; \
+	fi
 	@$(PYTHON) -m pip install --upgrade pip
 	@echo "✅ venv ready"
 
@@ -117,7 +115,7 @@ coverage: venv
 	$(COVERAGE) report
 	$(COVERAGE) xml
 	$(COVERAGE) html
-	$(VENV)/bin/coverage-badge -o coverage.svg -f
+	$(VENV)/bin/genbadge coverage -i coverage.xml -o coverage.svg
 
 clean:
 	@echo "🧹 cleaning build artifacts"

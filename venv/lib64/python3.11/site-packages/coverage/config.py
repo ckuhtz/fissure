@@ -61,16 +61,16 @@ class HandyConfigParser(configparser.ConfigParser):
                 return real_section
         return None
 
-    def has_option(self, section: str, option: str) -> bool:
+    def has_option(self, section: str, option: str) -> bool:    # type: ignore[override]
         real_section = self.real_section(section)
         if real_section is not None:
             return super().has_option(real_section, option)
         return False
 
-    def has_section(self, section: str) -> bool:
+    def has_section(self, section: str) -> bool:    # type: ignore[override]
         return bool(self.real_section(section))
 
-    def options(self, section: str) -> list[str]:
+    def options(self, section: str) -> list[str]:   # type: ignore[override]
         real_section = self.real_section(section)
         if real_section is not None:
             return super().options(real_section)
@@ -197,6 +197,7 @@ class CoverageConfig(TConfigurable, TPluginConfig):
         self.command_line: str | None = None
         self.concurrency: list[str] = []
         self.context: str | None = None
+        self.core: str | None = None
         self.cover_pylib = False
         self.data_file = ".coverage"
         self.debug: list[str] = []
@@ -379,6 +380,7 @@ class CoverageConfig(TConfigurable, TPluginConfig):
         ("command_line", "run:command_line"),
         ("concurrency", "run:concurrency", "list"),
         ("context", "run:context"),
+        ("core", "run:core"),
         ("cover_pylib", "run:cover_pylib", "boolean"),
         ("data_file", "run:data_file"),
         ("debug", "run:debug", "list"),
@@ -617,10 +619,17 @@ def read_coverage_config(
     env_data_file = os.getenv("COVERAGE_FILE")
     if env_data_file:
         config.data_file = env_data_file
+
     # $set_env.py: COVERAGE_DEBUG - Debug options: https://coverage.rtfd.io/cmd.html#debug
     debugs = os.getenv("COVERAGE_DEBUG")
     if debugs:
         config.debug.extend(d.strip() for d in debugs.split(","))
+
+    # Read the COVERAGE_CORE environment variable for backward compatibility,
+    # and because we use it in the test suite to pick a specific core.
+    env_core = os.getenv("COVERAGE_CORE")
+    if env_core:
+        config.core = env_core
 
     # 4) from constructor arguments:
     config.from_args(**kwargs)
