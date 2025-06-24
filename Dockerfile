@@ -15,15 +15,11 @@ ENV PATH="$VENV/bin:$PATH"
 
 # create project dependencies
 WORKDIR /app
-COPY pyproject.toml .
-RUN pip install -U pip && \
-    pip install -e .[dev]
+COPY . .
 
-# copy rest of source
-COPY pyproject.toml .
-COPY src/ ./src
-COPY spec/ ./spec
-COPY tests/ ./tests
+# install dependencies
+RUN pip install -U pip setuptools<81 && \
+    pip install -e .[dev]
 
 # default command
 CMD ["bash"]
