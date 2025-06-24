@@ -190,7 +190,7 @@ docker-coverage: docker-build
 docker-clean:
 	@echo "🧹 cleaning docker artifacts"
 	@docker image rm ${IMAGE_NAME} --force 2>/dev/null || true
-	@docker image prune 2>/dev/null || true
+	@docker image prune --force 2>/dev/null || true
 	@docker container prune -f 2>/dev/null || true
 	@docker volume prune -f 2>/dev/null || true
 	@echo "✅ docker clean"
