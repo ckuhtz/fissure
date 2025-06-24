@@ -18,7 +18,7 @@ WORKDIR /app
 COPY . .
 
 # install dependencies
-RUN pip install -U pip setuptools<81 && \
+RUN pip install -U pip "setuptools<81" && \
     pip install -e .[dev]
 
 # default command
