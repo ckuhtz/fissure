@@ -142,7 +142,9 @@ clean:
 				-name results.xml \
 			\) \
 		-exec sh -c 'echo "\t💥 $$1"; rm -f -- "$$1"' _ {} \;
-	@echo "✅ tree clean"
+	@echo "🧹 3️⃣ docker image"
+	@$(MAKE) --no-print-directory docker-clean
+	@echo "✅ tree + docker clean"
 
 dist-clean: clean docker-clean
 	@echo "🧼 sparkly clean"
@@ -187,7 +189,10 @@ docker-coverage: docker-build
 
 docker-clean:
 	@echo "🧹 cleaning docker artifacts"
-	@docker image rm ${IMAGE_NAME} --force 2>/dev/null
+	@docker image rm ${IMAGE_NAME} --force 2>/dev/null || true
+	@docker image prune 2>/dev/null || true
+	@docker container prune -f 2>/dev/null || true
+	@docker volume prune -f 2>/dev/null || true
 	@echo "✅ docker clean"
 
 # -------------------------------
